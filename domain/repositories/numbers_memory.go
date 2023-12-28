@@ -35,9 +35,11 @@ func (nm *NumbersMemory) Get(number int) (model.Value, error) {
 }
 func (nm *NumbersMemory) GetAll() ([]model.Value, error) {
 	numbers := []model.Value{}
+	nm.mux.Lock()
 	for _, v := range nm.memory {
 		numbers = append(numbers, v)
 	}
+	nm.mux.Unlock()
 	return numbers, nil
 }
 
@@ -46,6 +48,8 @@ func (nm *NumbersMemory) Delete(num int) error {
 	if err != nil {
 		return fmt.Errorf("Value not found: %v", num)
 	}
+	nm.mux.Lock()
 	delete(nm.memory, num)
+	nm.mux.Unlock()
 	return nil
 }
