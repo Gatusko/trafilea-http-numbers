@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/Gatusko/trafilea-http-numbers/domain/model"
 	"github.com/Gatusko/trafilea-http-numbers/services"
 	"github.com/go-chi/chi/v5"
@@ -60,8 +61,14 @@ func (n *NumberController) deleteNumber(w http.ResponseWriter, r *http.Request) 
 	}
 	err = n.numberService.DeleteNumber(numInt)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
+		switch {
+		case fmt.Sprintf("Value not found: %v", numInt) == err.Error():
+			respondWithError(w, http.StatusNotFound, err.Error())
+			return
+		default:
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 	respondWithoutBody(w, http.StatusOK)
 }
@@ -79,8 +86,14 @@ func (n *NumberController) getNumber(w http.ResponseWriter, r *http.Request) {
 	}
 	val, err := n.numberService.GetNumber(numInt)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
+		switch {
+		case fmt.Sprintf("Value not found: %v", numInt) == err.Error():
+			respondWithError(w, http.StatusNotFound, err.Error())
+			return
+		default:
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 	respondWithJson(w, http.StatusOK, val)
 }
