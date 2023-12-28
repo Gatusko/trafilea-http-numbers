@@ -40,11 +40,25 @@ Response:
 "value": "Type 3"
 }
 ```
-If number doesn't not exist it return 404 not found
+If number doesn't not exist it return `404` not found
 
-POST /v1/numbers 
-application/json body
+`POST /v1/numbers`
+
+It creates the number and store the information in  the memory
+Request Body :
+```json
 {
 "number" : 30
 }
-DELETE /v1/numbers/{number}
+```
+Response:
+```json
+{
+"number": 30,
+"value": "Type 3"
+}
+```
+`DELETE /v1/numbers/{number}`
+
+It delete the number
+Response Body nothing
